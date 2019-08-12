@@ -171,7 +171,7 @@
      <string>更多</string>
     </property>
     <addaction name="Help"/>
-    <addaction name="Abort"/>
+    <addaction name="About"/>
    </widget>
    <addaction name="file"/>
    <addaction name="menu"/>
@@ -185,6 +185,12 @@
    <property name="statusTip">
     <string>新建一个地图文件</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WindowShortcut</enum>
+   </property>
   </action>
   <action name="Save">
    <property name="text">
@@ -192,6 +198,9 @@
    </property>
    <property name="statusTip">
     <string>保存当前地图文件</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="Open">
@@ -201,6 +210,9 @@
    <property name="statusTip">
     <string>打开一个地图文件</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="Quit">
    <property name="text">
@@ -208,6 +220,9 @@
    </property>
    <property name="statusTip">
     <string>退出</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
    </property>
   </action>
   <action name="Undo">
@@ -217,6 +232,9 @@
    <property name="statusTip">
     <string>撤回一次操作</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
   </action>
   <action name="Redo">
    <property name="text">
@@ -225,13 +243,19 @@
    <property name="statusTip">
     <string>重做上次操作</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+Z</string>
+   </property>
   </action>
   <action name="Help">
    <property name="text">
     <string>帮助</string>
    </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
   </action>
-  <action name="Abort">
+  <action name="About">
    <property name="text">
     <string>关于</string>
    </property>
