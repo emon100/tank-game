@@ -42,12 +42,13 @@ private:
     void undo();
     void redo();
 
-    void set_table_by_file();//测试中
-    void init_table();//测试，新建表格
+    void set_table_by_file();//
+    void prepare_table();
+    void draw_table();//绘制表格
 
     void set_cell(int row,int column,MAP_OBJECT sta);
     void set_cell_by_cursor_status(int row,int column);
-    void set_spawn_direction(int row,int column);
+    void loop_spawn_direction(int row,int column);
 
     bool map_validate(MAP_OBJECT sta);
 

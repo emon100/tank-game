@@ -14,13 +14,12 @@ Mapmaker::Mapmaker(QWidget *parent) :
         ui(new Ui::Mapmaker)
 {
     ui->setupUi(this);
-    init_table();
+    draw_table();
 
     ui->statusbar->showMessage("View mode");
     ui->maptable->setShowGrid(true); //隐藏分割线
 
 
-    QPainter painter(this);
     connect(ui->New,&QAction::triggered,this,&Mapmaker::add_new);
     connect(ui->Open,&QAction::triggered,this,&Mapmaker::open);
     connect(ui->Save,&QAction::triggered,this,&Mapmaker::save);
@@ -46,7 +45,7 @@ Mapmaker::Mapmaker(QWidget *parent) :
     //click to edit mapplane
     connect(ui->maptable,&QTableWidget::cellClicked,this,&Mapmaker::set_cell_by_cursor_status);
     //double click to edit spawn;
-    connect(ui->maptable,&QTableWidget::cellDoubleClicked,this,&Mapmaker::set_spawn_direction);
+    connect(ui->maptable,&QTableWidget::cellDoubleClicked,this,&Mapmaker::loop_spawn_direction);
 
 
 }
@@ -62,7 +61,8 @@ bool Mapmaker::map_validate(MAP_OBJECT sta){
     }
     return ok;
 }
-void Mapmaker::set_spawn_direction(int row,int column){
+
+void Mapmaker::loop_spawn_direction(int row,int column){
     //first check if the cell is spawn ,then change direction one by one in loop
     //finally show statusbar message;
     QPoint temp(row,column);
@@ -96,14 +96,15 @@ void Mapmaker::set_cell_by_cursor_status(int row,int column){
 
 void Mapmaker::set_cell(int row, int column, MAP_OBJECT sta){//change the Table and also the map behind
     QLabel *cell=nullptr;
+
     switch (sta) {
-    case NONE : return;
-    case AIR  :  cell = nullptr;break;
-    case BRICK:  cell = new QLabel("Brick") ;cell->setPixmap(QPixmap::fromImage(BrickImg));break;
-    case IRON :  cell = new QLabel("Iron")  ;cell->setPixmap(QPixmap::fromImage(IronImg)) ;break;
+    case NONE  : return;
+    case AIR   : cell = nullptr;break;
+    case BRICK : cell = new QLabel("Brick") ;cell->setPixmap(QPixmap::fromImage(BrickImg));break;
+    case IRON  : cell = new QLabel("Iron")  ;cell->setPixmap(QPixmap::fromImage(IronImg)) ;break;
         //Bases and spawns has to keep the only one;
-    case BASE1:  cell = new QLabel("Base1") ;cell->setPixmap(QPixmap::fromImage(Base1Img)) ;ui->maptable->removeCellWidget(map.base1.x(),map.base1.y())  ;set_cell(map.base1.x(),map.base1.y(),AIR);map.base1.setX(row);map.base1.setY(column);break;
-    case BASE2:  cell = new QLabel("Base2") ;cell->setPixmap(QPixmap::fromImage(Base2Img)) ;ui->maptable->removeCellWidget(map.base2.x(),map.base2.y())  ;set_cell(map.base2.x(),map.base2.y(),AIR);map.base2.setX(row);map.base2.setY(column);break;
+    case BASE1 : cell = new QLabel("Base1") ;cell->setPixmap(QPixmap::fromImage(Base1Img)) ;ui->maptable->removeCellWidget(map.base1.x(),map.base1.y())  ;set_cell(map.base1.x(),map.base1.y(),AIR);map.base1.setX(row);map.base1.setY(column);break;
+    case BASE2 : cell = new QLabel("Base2") ;cell->setPixmap(QPixmap::fromImage(Base2Img)) ;ui->maptable->removeCellWidget(map.base2.x(),map.base2.y())  ;set_cell(map.base2.x(),map.base2.y(),AIR);map.base2.setX(row);map.base2.setY(column);break;
     case SPAWN1: cell = new QLabel("Spawn1");cell->setPixmap(QPixmap::fromImage(Spawn1Img));ui->maptable->removeCellWidget(map.spawn1.x(),map.spawn1.y());set_cell(map.spawn1.x(),map.spawn1.y(),AIR);map.spawn1.setX(row);map.spawn1.setY(column);break;
     case SPAWN2: cell = new QLabel("Spawn2");cell->setPixmap(QPixmap::fromImage(Spawn2Img));ui->maptable->removeCellWidget(map.spawn2.x(),map.spawn2.y());set_cell(map.spawn2.x(),map.spawn2.y(),AIR);map.spawn2.setX(row);map.spawn2.setY(column);break;
     }
@@ -112,7 +113,7 @@ void Mapmaker::set_cell(int row, int column, MAP_OBJECT sta){//change the Table 
     ui->maptable->setShowGrid(true); //隐藏分割线
 }
 
-void Mapmaker::init_table(){
+void Mapmaker::prepare_table(){
     ui->maptable->clear();
     ui->maptable->setColumnCount(mapsize);
     ui->maptable->setRowCount(mapsize);
@@ -122,6 +123,11 @@ void Mapmaker::init_table(){
         ui->maptable->setColumnWidth(i,32);
         ui->maptable->setRowHeight(i,32);
     }
+}
+
+void Mapmaker::draw_table(){
+    prepare_table();
+    //draw
     for (size_t i=0;i<mapsize;++i) {
         for(size_t j=0;j<mapsize;++j){
             set_cell(static_cast<int>(i),static_cast<int>(j),(map.mapplane[i][j]));
@@ -142,7 +148,7 @@ void Mapmaker::change_mode(){
 
 template<>
 void Mapmaker::change_mode<NONE>(){
-    ui->maptable->setShowGrid(false);ui->statusbar->showMessage("View mode");init_table();cursor_status=NONE;
+    ui->maptable->setShowGrid(false);ui->statusbar->showMessage("View mode");draw_table();cursor_status=NONE;
 }
 
 void Mapmaker::add_new(){
@@ -157,7 +163,7 @@ void Mapmaker::add_new(){
         //do nothing
     }
     window_to_be_use->map=MAP::mymap();
-    window_to_be_use->init_table();
+    window_to_be_use->draw_table();
     return;
 }
 
@@ -196,7 +202,7 @@ void Mapmaker::open_with_path(QString path){
         QDataStream in(&file);
         in.readRawData(reinterpret_cast<char *>(&map),sizeof(map));
         file.close();
-        init_table();
+        draw_table();
     }
     return;
 }
@@ -241,7 +247,7 @@ void Mapmaker::undo(){
     }else{
         Redostack.push(map);
         map=Undostack.pop();
-        init_table();
+        draw_table();
     }
 }
 
@@ -251,7 +257,7 @@ void Mapmaker::redo(){
     }else{
         Undostack.push(map);
         map=Redostack.pop();
-        init_table();
+        draw_table();
     }
 }
 
