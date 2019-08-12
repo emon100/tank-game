@@ -40,8 +40,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 FORMS += \
     mapmaker.ui \
-    mywidget.ui \
-    treewidget.ui
 
 RESOURCES += \
-    source/res.qrc
+    resources.qrc
