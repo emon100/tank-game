@@ -58,6 +58,12 @@
            <iconset resource="resources.qrc">
             <normaloff>:/resources/air.png</normaloff>:/resources/air.png</iconset>
           </property>
+          <property name="default">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -165,6 +171,7 @@
      <string>更多</string>
     </property>
     <addaction name="Help"/>
+    <addaction name="Abort"/>
    </widget>
    <addaction name="file"/>
    <addaction name="menu"/>
@@ -175,19 +182,31 @@
    <property name="text">
     <string>新建</string>
    </property>
+   <property name="statusTip">
+    <string>新建一个地图文件</string>
+   </property>
   </action>
   <action name="Save">
    <property name="text">
     <string>保存</string>
+   </property>
+   <property name="statusTip">
+    <string>保存当前地图文件</string>
    </property>
   </action>
   <action name="Open">
    <property name="text">
     <string>打开</string>
    </property>
+   <property name="statusTip">
+    <string>打开一个地图文件</string>
+   </property>
   </action>
   <action name="Quit">
    <property name="text">
+    <string>退出</string>
+   </property>
+   <property name="statusTip">
     <string>退出</string>
    </property>
   </action>
@@ -195,15 +214,26 @@
    <property name="text">
     <string>撤回</string>
    </property>
+   <property name="statusTip">
+    <string>撤回一次操作</string>
+   </property>
   </action>
   <action name="Redo">
    <property name="text">
     <string>重做</string>
    </property>
+   <property name="statusTip">
+    <string>重做上次操作</string>
+   </property>
   </action>
   <action name="Help">
    <property name="text">
     <string>帮助</string>
+   </property>
+  </action>
+  <action name="Abort">
+   <property name="text">
+    <string>关于</string>
    </property>
   </action>
  </widget>

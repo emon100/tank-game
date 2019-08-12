@@ -26,6 +26,9 @@ Mapmaker::Mapmaker(QWidget *parent) :
     connect(ui->Save,&QAction::triggered,this,&Mapmaker::save);
     connect(ui->Quit,&QAction::triggered,this,&Mapmaker::close);
 
+    connect(ui->Redo,&QAction::triggered,this,&Mapmaker::redo);
+    connect(ui->Undo,&QAction::triggered,this,&Mapmaker::undo);
+
 
     //click to change into view mode
     connect(ui->ViewButton,&QPushButton::clicked,this,&Mapmaker::change_mode<NONE>);
@@ -84,6 +87,7 @@ void Mapmaker::set_spawn_direction(int row,int column){
 void Mapmaker::set_cell_by_cursor_status(int row,int column){
     //To make sure the map has 2 base and 2 spawn
     if(cursor_status!=NONE&&map_validate(map.mapplane[static_cast<size_t>(row)][static_cast<size_t>(column)])){
+        Undostack.push(map);
         set_cell(row,column,this->cursor_status);
     }else{
         //do nothing
@@ -107,7 +111,6 @@ void Mapmaker::set_cell(int row, int column, MAP_OBJECT sta){//change the Table 
     ui->maptable->setCellWidget(row,column,cell);
     ui->maptable->setShowGrid(true); //隐藏分割线
 }
-
 
 void Mapmaker::init_table(){
     ui->maptable->clear();
@@ -231,6 +234,27 @@ void Mapmaker::close(){
     }
     else return;
 }
+
+void Mapmaker::undo(){
+    if(Undostack.isEmpty()){
+        //do nothing
+    }else{
+        Redostack.push(map);
+        map=Undostack.pop();
+        init_table();
+    }
+}
+
+void Mapmaker::redo(){
+    if(Redostack.isEmpty()){
+        //do nothing
+    }else{
+        Undostack.push(map);
+        map=Redostack.pop();
+        init_table();
+    }
+}
+
 
 Mapmaker::~Mapmaker()
 {

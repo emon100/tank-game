@@ -9,6 +9,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QLabel>
+#include <QStack>
 
 namespace Ui {
 class Mapmaker;
@@ -26,6 +27,9 @@ private:
     MAP::mymap map;
     MAP_OBJECT cursor_status;
 
+    QStack<MAP::mymap> Undostack;
+    QStack<MAP::mymap> Redostack;
+
     template<MAP_OBJECT cursor_status>
     void change_mode();
 
@@ -34,6 +38,9 @@ private:
     void open_with_path(QString path);//打开文件
     void save();//保存文件
     void close();//关闭文件
+
+    void undo();
+    void redo();
 
     void set_table_by_file();//测试中
     void init_table();//测试，新建表格
