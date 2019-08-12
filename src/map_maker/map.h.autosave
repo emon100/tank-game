@@ -1,0 +1,20 @@
+#ifndef MAP_H
+#define MAP_H
+#include <complex>
+
+enum MAP_OBJECT{AIR=0,IRON,BRICK,SPAWN1,SPAWN2,BASE1,BASE2};
+enum DIRECTION{EAST=0,SOUTH,WEST,NORTH};
+
+using std::complex;
+class map{
+public:
+    MAP_OBJECT map[64][64];
+private:
+   	complex<int> spawn1;
+   	complex<int> spawn2;
+    DIRECTION spawn1_direction;
+    DIRECTION spawn2_direction;
+};
+        
+
+#endif // MAP_H

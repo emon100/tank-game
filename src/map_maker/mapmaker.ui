@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Mapmaker</class>
+ <widget class="QMainWindow" name="Mapmaker">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1201</width>
+    <height>800</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1200</width>
+    <height>800</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Mapmaker</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QPushButton" name="ViewButton">
+          <property name="text">
+           <string>View</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="AirButton">
+          <property name="text">
+           <string>Air</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="BrickButton">
+          <property name="text">
+           <string>Brick</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="IronButton">
+          <property name="text">
+           <string>Iron</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Base1Button">
+          <property name="text">
+           <string>Base1</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Base2Button">
+          <property name="text">
+           <string>Base2</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Spawn1Button">
+          <property name="text">
+           <string>Spawn1</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Spawn2Button">
+          <property name="text">
+           <string>Spawn2</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QTableWidget" name="maptable"/>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1201</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="file">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="New"/>
+    <addaction name="Open"/>
+    <addaction name="Save"/>
+    <addaction name="Quit"/>
+   </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>编辑</string>
+    </property>
+    <addaction name="Undo"/>
+    <addaction name="Redo"/>
+   </widget>
+   <widget class="QMenu" name="more">
+    <property name="title">
+     <string>更多</string>
+    </property>
+    <addaction name="Help"/>
+   </widget>
+   <addaction name="file"/>
+   <addaction name="menu"/>
+   <addaction name="more"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="New">
+   <property name="text">
+    <string>新建</string>
+   </property>
+  </action>
+  <action name="Save">
+   <property name="text">
+    <string>保存</string>
+   </property>
+  </action>
+  <action name="Open">
+   <property name="text">
+    <string>打开</string>
+   </property>
+  </action>
+  <action name="Quit">
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </action>
+  <action name="Undo">
+   <property name="text">
+    <string>撤回</string>
+   </property>
+  </action>
+  <action name="Redo">
+   <property name="text">
+    <string>重做</string>
+   </property>
+  </action>
+  <action name="Help">
+   <property name="text">
+    <string>帮助</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
