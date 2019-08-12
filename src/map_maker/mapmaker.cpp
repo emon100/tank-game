@@ -6,13 +6,12 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QDataStream>
-#include <QDebug>
 
 Mapmaker::Mapmaker(QWidget *parent) :
-    QMainWindow(parent),
-    plane(),
-    cursor_status(NONE),
-    ui(new Ui::Mapmaker)
+        QMainWindow(parent),
+        map(),
+        cursor_status(NONE),
+        ui(new Ui::Mapmaker)
 {
     ui->setupUi(this);
     init_table();
@@ -22,6 +21,7 @@ Mapmaker::Mapmaker(QWidget *parent) :
 
 
     QPainter painter(this);
+    connect(ui->New,&QAction::triggered,this,&Mapmaker::add_new);
     connect(ui->Open,&QAction::triggered,this,&Mapmaker::open);
     connect(ui->Save,&QAction::triggered,this,&Mapmaker::save);
     connect(ui->Quit,&QAction::triggered,this,&Mapmaker::close);
@@ -32,117 +32,81 @@ Mapmaker::Mapmaker(QWidget *parent) :
 
     //click to change into different edit mode
     //I think its better to put edit mode into a function.
-    connect(ui->AirButton,  &QPushButton::clicked,this,&Mapmaker::change_mode<AIR>);
-    connect(ui->IronButton, &QPushButton::clicked,this,&Mapmaker::change_mode<IRON>);
-    connect(ui->BrickButton,&QPushButton::clicked,this,&Mapmaker::change_mode<BRICK>);
-    connect(ui->Base1Button,&QPushButton::clicked,this,&Mapmaker::change_mode<BASE1>);
-    connect(ui->Base2Button,&QPushButton::clicked,this,&Mapmaker::change_mode<BASE2>);
+    connect(ui->AirButton,   &QPushButton::clicked,this,&Mapmaker::change_mode<AIR>);
+    connect(ui->IronButton,  &QPushButton::clicked,this,&Mapmaker::change_mode<IRON>);
+    connect(ui->BrickButton, &QPushButton::clicked,this,&Mapmaker::change_mode<BRICK>);
+    connect(ui->Base1Button, &QPushButton::clicked,this,&Mapmaker::change_mode<BASE1>);
+    connect(ui->Base2Button, &QPushButton::clicked,this,&Mapmaker::change_mode<BASE2>);
+    connect(ui->Spawn1Button,&QPushButton::clicked,this,&Mapmaker::change_mode<SPAWN1>);
+    connect(ui->Spawn2Button,&QPushButton::clicked,this,&Mapmaker::change_mode<SPAWN2>);
 
     //click to edit mapplane
     connect(ui->maptable,&QTableWidget::cellClicked,this,&Mapmaker::set_cell_by_cursor_status);
+    //double click to edit spawn;
+    connect(ui->maptable,&QTableWidget::cellDoubleClicked,this,&Mapmaker::set_spawn_direction);
 
 
+}
+
+bool Mapmaker::map_validate(MAP_OBJECT sta){
+    bool ok=true;
+    switch (sta){
+    case BASE1 :ui->statusbar->showMessage("Warning: A Base1 is required on the map!"); ok=false;break;
+    case BASE2 :ui->statusbar->showMessage("Warning: A Base2 is required on the map!"); ok=false;break;
+    case SPAWN1:ui->statusbar->showMessage("Warning: A Spawn1 is required on the map!");ok=false;break;
+    case SPAWN2:ui->statusbar->showMessage("Warning: A Spawn2 is required on the map!");ok=false;break;
+    default:break;
+    }
+    return ok;
+}
+void Mapmaker::set_spawn_direction(int row,int column){
+    //first check if the cell is spawn ,then change direction one by one in loop
+    //finally show statusbar message;
+    QPoint temp(row,column);
+    DIRECTION now;
+    if(map.spawn1==temp){
+        map.spawn1_direction=static_cast<DIRECTION>((static_cast<int>(map.spawn1_direction)+1)%4);
+        now=map.spawn1_direction;
+    }else if(map.spawn2==temp){
+        map.spawn2_direction=static_cast<DIRECTION>(static_cast<int>((map.spawn2_direction)+1)%4);
+        now=map.spawn2_direction;
+    }else {
+        return;
+    }
+    switch (now) {
+    case EAST : ui->statusbar->showMessage("The spawn is now facing the east.");break;
+    case SOUTH: ui->statusbar->showMessage("The spawn is now facing the south.");break;
+    case WEST : ui->statusbar->showMessage("The spawn is now facing the west.");break;
+    case NORTH: ui->statusbar->showMessage("The spawn is now facing the north.");break;
+    }
 }
 
 void Mapmaker::set_cell_by_cursor_status(int row,int column){
-    set_cell(row,column,this->cursor_status);
-}
-void Mapmaker::open(){
-    QString path;
-    //dialog
-    Mapmaker *window_to_be_use = this;
-    path = QFileDialog::getOpenFileName(this,
-                                        tr("Open file"),
-                                        ".",
-                                        tr("Text Files(*.map)"));
-
-    if(path.isEmpty()){
-        QMessageBox::warning(this, tr("Path"),
-                             tr("You did not select any file."));
-    }
-    else{//OK
-        //Ask if open in new Window
-    if(QMessageBox::Yes==QMessageBox::warning(this,
-                                              tr("Warning!"),
-                                              tr("Open in this window might lead to data lost.\nOpen in a new window?"),
-                                              QMessageBox::Yes|QMessageBox::No,QMessageBox::Yes)){
-        window_to_be_use = new Mapmaker();
-        window_to_be_use->show();
-    }
-    else {
+    //To make sure the map has 2 base and 2 spawn
+    if(cursor_status!=NONE&&map_validate(map.mapplane[static_cast<size_t>(row)][static_cast<size_t>(column)])){
+        set_cell(row,column,this->cursor_status);
+    }else{
         //do nothing
     }
-
-    window_to_be_use->open_with_path(path);
-    return;
-    }
-
-}
-void Mapmaker::open_with_path(QString path){
-        QFile file(path);
-            if (!file.open(QIODevice::ReadOnly )) {
-                QMessageBox::warning(this, tr("Read File"),
-                                     tr("Cannot open file:\n%1").arg(path));
-                return;
-            }else{
-                QDataStream in(&file);
-                in.readRawData(reinterpret_cast<char *>(&plane),sizeof(plane));
-                file.close();
-                qDebug()<<plane.base1.x();
-                init_table();
-        }
-        return;
 }
 
-//TODO
-void Mapmaker::save(){
-    QString  path = QFileDialog::getSaveFileName(this,
-                                                 tr("Open File"),
-                                                 ".",
-                                                 tr("Text Files(*.map)"));
-    if(path.isEmpty()) {
-        QMessageBox::warning(this, tr("Path"),
-                             tr("You did not select any file."));
-    } else {
-        QFile file(path);
-        if (!file.open(QIODevice::WriteOnly )) {
-            QMessageBox::warning(this, tr("Write File"),
-                                 tr("Cannot open file:\n%1").arg(path));
-            return;
-        }
-        QDataStream out(&file);
-        out.writeRawData(reinterpret_cast<char *>(&plane),sizeof (plane));
-        file.close();
-    }
-}
-
-void Mapmaker::close(){
-    if(QMessageBox::Yes==QMessageBox::question(this,
-                                               tr("Quit?"),
-                                               tr("Are you sure to quit?"),
-                                               QMessageBox::Yes|QMessageBox::No,QMessageBox::No))
-    {
-        QWidget::close();
-    }
-    else return;
-}
-
-//TOTOTOTOTOTOTTODODODODODODDO:complete mapobject type
 void Mapmaker::set_cell(int row, int column, MAP_OBJECT sta){//change the Table and also the map behind
-    QLabel *cell;
+    QLabel *cell=nullptr;
     switch (sta) {
-    case NONE        : return;
-    case AIR  : cell = nullptr;plane.mapplane[static_cast<size_t>(row)][static_cast<size_t>(column)]=AIR;break;
-    case BRICK: cell = new QLabel("Brick");plane.mapplane[static_cast<size_t>(row)][static_cast<size_t>(column)]=BRICK;break;
-    case IRON : cell = new QLabel("Iron");cell->setPixmap(QPixmap::fromImage(IronImg));plane.mapplane[static_cast<size_t>(row)][static_cast<size_t>(column)]=IRON;break;
-    case BASE1: cell = new QLabel("Base1");cell->setPixmap(QPixmap::fromImage(Base1Img));ui->maptable->removeCellWidget(plane.base1.x(),plane.base1.y());plane.base1.setX(row);plane.base1.setY(column);break;
-    case BASE2: cell = new QLabel("Base2");cell->setPixmap(QPixmap::fromImage(Base2Img));ui->maptable->removeCellWidget(plane.base2.x(),plane.base2.y());plane.base2.setX(row);plane.base2.setY(column);break;
+    case NONE : return;
+    case AIR  :  cell = nullptr;break;
+    case BRICK:  cell = new QLabel("Brick") ;cell->setPixmap(QPixmap::fromImage(BrickImg));break;
+    case IRON :  cell = new QLabel("Iron")  ;cell->setPixmap(QPixmap::fromImage(IronImg)) ;break;
+        //Bases and spawns has to keep the only one;
+    case BASE1:  cell = new QLabel("Base1") ;cell->setPixmap(QPixmap::fromImage(Base1Img)) ;ui->maptable->removeCellWidget(map.base1.x(),map.base1.y())  ;set_cell(map.base1.x(),map.base1.y(),AIR);map.base1.setX(row);map.base1.setY(column);break;
+    case BASE2:  cell = new QLabel("Base2") ;cell->setPixmap(QPixmap::fromImage(Base2Img)) ;ui->maptable->removeCellWidget(map.base2.x(),map.base2.y())  ;set_cell(map.base2.x(),map.base2.y(),AIR);map.base2.setX(row);map.base2.setY(column);break;
+    case SPAWN1: cell = new QLabel("Spawn1");cell->setPixmap(QPixmap::fromImage(Spawn1Img));ui->maptable->removeCellWidget(map.spawn1.x(),map.spawn1.y());set_cell(map.spawn1.x(),map.spawn1.y(),AIR);map.spawn1.setX(row);map.spawn1.setY(column);break;
+    case SPAWN2: cell = new QLabel("Spawn2");cell->setPixmap(QPixmap::fromImage(Spawn2Img));ui->maptable->removeCellWidget(map.spawn2.x(),map.spawn2.y());set_cell(map.spawn2.x(),map.spawn2.y(),AIR);map.spawn2.setX(row);map.spawn2.setY(column);break;
     }
-    plane.mapplane[static_cast<size_t>(row)][static_cast<size_t>(column)]=static_cast<MAP_OBJECT>(sta);
+    map.mapplane[static_cast<size_t>(row)][static_cast<size_t>(column)]=sta;
     ui->maptable->setCellWidget(row,column,cell);
     ui->maptable->setShowGrid(true); //隐藏分割线
 }
-
 
 
 void Mapmaker::init_table(){
@@ -155,13 +119,16 @@ void Mapmaker::init_table(){
         ui->maptable->setColumnWidth(i,32);
         ui->maptable->setRowHeight(i,32);
     }
-    set_cell(plane.base1.x(),plane.base1.y(),BASE1);
-    set_cell(plane.base2.x(),plane.base2.y(),BASE2);
     for (size_t i=0;i<mapsize;++i) {
         for(size_t j=0;j<mapsize;++j){
-            set_cell(static_cast<int>(i),static_cast<int>(j),(plane.mapplane[i][j]));
+            set_cell(static_cast<int>(i),static_cast<int>(j),(map.mapplane[i][j]));
         }
     }
+    //Make sure has spawn and base
+    set_cell(map.base1.x(),map.base1.y(),BASE1);
+    set_cell(map.base2.x(),map.base2.y(),BASE2);
+    set_cell(map.spawn1.x(),map.spawn1.y(),SPAWN1);
+    set_cell(map.spawn2.x(),map.spawn2.y(),SPAWN2);
 }
 
 //更换模式的函数模板
@@ -172,7 +139,97 @@ void Mapmaker::change_mode(){
 
 template<>
 void Mapmaker::change_mode<NONE>(){
-    ui->maptable->setShowGrid(false);ui->statusbar->showMessage("View mode");cursor_status=NONE;
+    ui->maptable->setShowGrid(false);ui->statusbar->showMessage("View mode");init_table();cursor_status=NONE;
+}
+
+void Mapmaker::add_new(){
+    Mapmaker *window_to_be_use = this;
+    if(QMessageBox::Yes==QMessageBox::warning(this,tr("Warning!"),
+                                              tr("Create new file in this window might lead to data lost.\nOpen in a new window?"),
+                                              QMessageBox::Yes|QMessageBox::No,QMessageBox::Yes)){
+        window_to_be_use = new Mapmaker();
+        window_to_be_use->show();
+    }
+    else {
+        //do nothing
+    }
+    window_to_be_use->map=MAP::mymap();
+    window_to_be_use->init_table();
+    return;
+}
+
+void Mapmaker::open(){
+    QString path;
+    //dialog
+    Mapmaker *window_to_be_use = this;
+    path = QFileDialog::getOpenFileName(this, tr("Open file"),".",tr("Text Files(*.map)"));
+
+    if(path.isEmpty()){//Not OK
+        QMessageBox::warning(this, tr("Path"),tr("You did not select any file."));
+    }
+    else{//OK
+         //Ask if open in new Window
+        if(QMessageBox::Yes==QMessageBox::warning(this,tr("Warning!"),
+                                                  tr("Open in this window might lead to data lost.\nOpen in a new window?"),
+                                                  QMessageBox::Yes|QMessageBox::No,QMessageBox::Yes)){
+            window_to_be_use = new Mapmaker();
+            window_to_be_use->show();
+        }
+        else {
+            //do nothing
+        }
+        window_to_be_use->open_with_path(path);
+        return;
+    }
+
+}
+void Mapmaker::open_with_path(QString path){
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly )) {
+        QMessageBox::warning(this, tr("Read File"),
+                             tr("Cannot open file:\n%1").arg(path));
+        return;
+    }else{
+        QDataStream in(&file);
+        in.readRawData(reinterpret_cast<char *>(&map),sizeof(map));
+        file.close();
+        init_table();
+    }
+    return;
+}
+
+//TODO
+void Mapmaker::save(){
+    QString  path = QFileDialog::getSaveFileName(this,
+                                                 tr("Open File"),
+                                                 ".",
+                                                 tr("Text Files(*.map)"));
+    if(path.isEmpty()){
+        QMessageBox::warning(this, tr("Path"),
+                             tr("You did not select any file."));
+    }else{
+        QFile file(path);
+        if (!file.open(QIODevice::WriteOnly)){
+            QMessageBox::warning(this, tr("Write File"),
+                                 tr("Cannot open file:\n%1").arg(path));
+            return;
+        }else{
+            QDataStream out(&file);
+            out.writeRawData(reinterpret_cast<char *>(&map),sizeof (map));
+            file.close();
+        }
+    }
+}
+
+void Mapmaker::close(){
+    if(QMessageBox::Yes==QMessageBox::question(this,
+                                               tr("Quit?"),
+                                               tr("Are you sure to quit?"),
+                                               QMessageBox::Yes|QMessageBox::No,QMessageBox::No))
+    {
+        QWidget::close();
+    }
+    else return;
 }
 
 Mapmaker::~Mapmaker()

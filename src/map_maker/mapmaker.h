@@ -23,12 +23,13 @@ public:
     ~Mapmaker();
 
 private:
-    MAP::mymap plane;
+    MAP::mymap map;
     MAP_OBJECT cursor_status;
 
     template<MAP_OBJECT cursor_status>
     void change_mode();
 
+    void add_new();//new one file
     void open();//打开文件
     void open_with_path(QString path);//打开文件
     void save();//保存文件
@@ -39,6 +40,9 @@ private:
 
     void set_cell(int row,int column,MAP_OBJECT sta);
     void set_cell_by_cursor_status(int row,int column);
+    void set_spawn_direction(int row,int column);
+
+    bool map_validate(MAP_OBJECT sta);
 
     Ui::Mapmaker *ui;
 };

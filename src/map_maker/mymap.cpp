@@ -5,19 +5,15 @@
 using namespace MAP;
 mymap::mymap():
         mapplane{},//SET plane EMPTY
-        spawn1(QPoint(1,1)),
-        spawn2(QPoint(mapsize-2,mapsize-2)),
-        base1(QPoint(1,(mapsize/2)-1)),
-        base2(QPoint(mapsize-2, (mapsize/2) -1)),
+        spawn1(1,1),
+        spawn2(mapsize-2,mapsize-2),
+        base1(1,(mapsize/2)-1),
+        base2(mapsize-2,(mapsize/2)-1),
         spawn1_direction(SOUTH),
         spawn2_direction(NORTH)
 {
 
     init();
-}
-
-mymap::mymap(MAP_OBJECT (*a)[64]){
-    init(a);
 }
 
 void mymap::init(){//初始化周围的墙壁
@@ -27,15 +23,10 @@ void mymap::init(){//初始化周围的墙壁
         mapplane[mapsize-1][i]=IRON;
         mapplane[i][mapsize-1]=IRON;
     }
-
-}
-
-void mymap::init(MAP_OBJECT (*a)[64]){
-    for (size_t i=0;i<mapsize;++i) {
-        for (size_t j=0;j<mapsize;++j) {
-            mapplane[i][j]=a[i][j];
-        }
-    }
+    mapplane[static_cast<size_t>(base1.x())][static_cast<size_t>(base1.y())];
+    mapplane[static_cast<size_t>(base2.x())][static_cast<size_t>(base2.y())];
+    mapplane[static_cast<size_t>(spawn1.x())][static_cast<size_t>(spawn1.y())];
+    mapplane[static_cast<size_t>(spawn2.x())][static_cast<size_t>(spawn2.y())];
 }
 
 #endif
