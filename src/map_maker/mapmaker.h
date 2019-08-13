@@ -50,7 +50,7 @@ private:
     void set_cell_by_cursor_status(int row,int column);
     void loop_spawn_direction(int row,int column);
 
-    bool map_validate(MAP_OBJECT sta);
+    bool enable_cursor(MAP_OBJECT sta);
 
     Ui::Mapmaker *ui;
 };
