@@ -29,7 +29,7 @@
    <string>Mapmaker</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset resource="../resources.qrc">
     <normaloff>:/resources/maker.png</normaloff>:/resources/maker.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -44,8 +44,17 @@
            <string>View</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
+           <iconset resource="../resources.qrc">
             <normaloff>:/resources/view.png</normaloff>:/resources/view.png</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -55,8 +64,14 @@
            <string>Air</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
+           <iconset resource="../resources.qrc">
             <normaloff>:/resources/air.png</normaloff>:/resources/air.png</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
           </property>
           <property name="default">
            <bool>false</bool>
@@ -72,8 +87,14 @@
            <string>Brick</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
+           <iconset resource="../resources.qrc">
             <normaloff>:/resources/brick.bmp</normaloff>:/resources/brick.bmp</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -83,8 +104,14 @@
            <string>Iron</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
+           <iconset resource="../resources.qrc">
             <normaloff>:/resources/iron.bmp</normaloff>:/resources/iron.bmp</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -94,8 +121,14 @@
            <string>Base1</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
+           <iconset resource="../resources.qrc">
             <normaloff>:/resources/base1.bmp</normaloff>:/resources/base1.bmp</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -105,8 +138,14 @@
            <string>Base2</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
+           <iconset resource="../resources.qrc">
             <normaloff>:/resources/base2.bmp</normaloff>:/resources/base2.bmp</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -116,8 +155,14 @@
            <string>Spawn1</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
+           <iconset resource="../resources.qrc">
             <normaloff>:/resources/spawn1.bmp</normaloff>:/resources/spawn1.bmp</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -127,8 +172,14 @@
            <string>Spawn2</string>
           </property>
           <property name="icon">
-           <iconset resource="resources.qrc">
+           <iconset resource="../resources.qrc">
             <normaloff>:/resources/spawn2.bmp</normaloff>:/resources/spawn2.bmp</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -262,7 +313,7 @@
   </action>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections/>
 </ui>

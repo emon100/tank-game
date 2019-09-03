@@ -41,7 +41,8 @@ Mapmaker::Mapmaker(QWidget *parent) :
     connect(ui->Spawn1Button,&QPushButton::clicked,this,&Mapmaker::change_mode<SPAWN1>);
     connect(ui->Spawn2Button,&QPushButton::clicked,this,&Mapmaker::change_mode<SPAWN2>);
 
-    //click to edit mapplane
+    //click or drag to edit mapplane
+    connect(ui->maptable,&QTableWidget::cellClicked,this,&Mapmaker::set_cell_by_cursor_status);
     connect(ui->maptable,&QTableWidget::cellEntered,this,&Mapmaker::set_cell_by_cursor_status);
     //double click to edit spawn;
     connect(ui->maptable,&QTableWidget::cellDoubleClicked,this,&Mapmaker::loop_spawn_direction);
@@ -72,23 +73,22 @@ void Mapmaker::loop_spawn_direction(int row,int column){
 }
 
 bool Mapmaker::enable_cursor(MAP_OBJECT sta){
-    bool ok=true;
-    if(sta==cursor_status)//一样的物品就
-        return true;
+    if(sta==cursor_status)//当前光标与物品一致无需编辑
+        return false;
     else {
         switch (sta){
-        case BASE1 :ui->statusbar->showMessage("Warning: A Base1 is required on the map!"); ok=false;break;
-        case BASE2 :ui->statusbar->showMessage("Warning: A Base2 is required on the map!"); ok=false;break;
-        case SPAWN1:ui->statusbar->showMessage("Warning: A Spawn1 is required on the map!");ok=false;break;
-        case SPAWN2:ui->statusbar->showMessage("Warning: A Spawn2 is required on the map!");ok=false;break;
+        case BASE1 :ui->statusbar->showMessage("Warning: A Base1 is required on the map!"); return false;
+        case BASE2 :ui->statusbar->showMessage("Warning: A Base2 is required on the map!"); return false;
+        case SPAWN1:ui->statusbar->showMessage("Warning: A Spawn1 is required on the map!");return false;
+        case SPAWN2:ui->statusbar->showMessage("Warning: A Spawn2 is required on the map!");return false;
         default:break;
         }
-        return ok;
+        return true;
     }
 }
 
 void Mapmaker::set_cell_by_cursor_status(int row,int column){//Controller
-    //To make sure the map has 2 base and 2 spawn
+    //To make sure the map has 2 base and 2 spawn,and make sure no redundant changes happen.
     if(cursor_status!=NONE&&enable_cursor(map.mapplane[static_cast<size_t>(row)][static_cast<size_t>(column)])){
         Undostack.push(map);
         set_cell(row,column,cursor_status);
@@ -113,7 +113,7 @@ void Mapmaker::set_cell(int row, int column, MAP_OBJECT sta){//Model:change the 
     }
     map.mapplane[static_cast<size_t>(row)][static_cast<size_t>(column)]=sta;
     ui->maptable->setCellWidget(row,column,cell);
-    ui->maptable->setShowGrid(true); //隐藏分割线
+    ui->maptable->setShowGrid(true);
 }
 
 void Mapmaker::prepare_table(){

@@ -25,13 +25,29 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        interface/J_currentplayer.cpp \
+        interface/J_idlogpage.cpp \
+        interface/J_idregister.cpp \
+        interface/J_loginpage.cpp \
+        interface/J_mainpage.cpp \
+        interface/J_mainwindow.cpp \
+        interface/J_players.cpp \
+        interface/J_succeed.cpp \
         main.cpp \
-        mapmaker.cpp \
-        mymap.cpp
+        map_maker/mapmaker.cpp \
+        map_maker/mymap.cpp \
 
 HEADERS += \
-        mapmaker.h \
-        mymap.h
+        interface/J_currentplayer.h \
+        interface/J_idlogpage.h \
+        interface/J_idregister.h \
+        interface/J_loginpage.h \
+        interface/J_mainpage.h \
+        interface/J_mainwindow.h \
+        interface/J_players.h \
+        interface/J_succeed.h \
+        map_maker/mapmaker.h \
+        map_maker/mymap.h \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -39,7 +55,15 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 FORMS += \
-    mapmaker.ui \
+    interface/currentplayer.ui \
+    interface/idlogpage.ui \
+    interface/idregister.ui \
+    interface/loginpage.ui \
+    interface/mainpage.ui \
+    interface/mainwindow.ui \
+    interface/players.ui \
+    interface/succeed.ui \
+    map_maker/mapmaker.ui \
 
 RESOURCES += \
     resources.qrc
