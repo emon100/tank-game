@@ -30,6 +30,13 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
+     <widget class="QPushButton" name="PauseButton">
+      <property name="text">
+       <string>暂停</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QLabel" name="P1_name">
       <property name="text">
        <string>p1</string>
@@ -79,9 +86,9 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="RankButton">
+     <widget class="QPushButton" name="IntroButton">
       <property name="text">
-       <string>排行榜</string>
+       <string>游戏说明</string>
       </property>
      </widget>
     </item>

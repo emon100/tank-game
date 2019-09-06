@@ -34,6 +34,7 @@ protected:
 private:
     Ui::game_widget *ui;
     QTimer timer;
+    bool ispause;
     QGraphicsScene  *scene;//场景
     QGraphicsView   *view;//视图
     MAP::mymap map;//地图文件
@@ -75,6 +76,8 @@ signals:
     void win(int n);
 private slots:
     void on_LevelButton_clicked();
+    void on_IntroButton_clicked();
+    void on_PauseButton_clicked();
 };
 
 #endif // GAME_WIDGET_H

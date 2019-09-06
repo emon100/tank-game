@@ -6,9 +6,11 @@
 #include <QFileDialog>
 #include <QDataStream>
 
+const int TIME=1000/50;
 game_widget::game_widget(QWidget *parent,const QString &p1_n,const QString &p2_n) :
     QWidget(parent),
     ui(new Ui::game_widget),
+    ispause(true),
     p1_name(p1_n),
     p2_name(p2_n)
 {
@@ -16,6 +18,7 @@ game_widget::game_widget(QWidget *parent,const QString &p1_n,const QString &p2_n
     p1_name="player1";
     p2_name="player2";
     setFocusPolicy(Qt::StrongFocus);
+    on_IntroButton_clicked();
     init();
 
     connect(&timer,&QTimer::timeout,this,&game_widget::object_update);
@@ -30,11 +33,13 @@ void game_widget::init(){
     p2_score=0;
     p1_lives=3;
     p2_lives=3;
+    ispause=true;
+    ui->PauseButton->setText("开始");
     game_ui_update();
     initSceneView();
     view->show();
     qDebug()<<"1";
-    timer.start(1000/50);
+    //timer.start(TIME);
     connect(&p1->bullet,&BULLET::destroy_item,this,&game_widget::p1_destroy);
     connect(&p2->bullet,&BULLET::destroy_item,this,&game_widget::p2_destroy);
     connect(&p1->bullet,&BULLET::kill_tank,this,&game_widget::kill_tank);
@@ -408,6 +413,7 @@ void game_widget::game_ui_update(){
     ui->P2_lives->setText(QString("剩余生命:%1").arg(p2_lives));
 }
 void game_widget::final(int n){
+    timer.stop();
     QMessageBox *over=new QMessageBox(QMessageBox::Information,"游戏结束",
                                       "text",
                                       QMessageBox::Yes|QMessageBox::No,nullptr);
@@ -441,4 +447,29 @@ void game_widget::on_LevelButton_clicked()
     scene->clear();
     view->close();
     init();
+}
+
+void game_widget::on_IntroButton_clicked()
+{
+    QMessageBox *over=new QMessageBox(QMessageBox::Information,"坦克大战游戏介绍",
+                                      "text",
+                                      QMessageBox::Ok,nullptr);
+    over->setText("    本游戏为一款双人对战游戏，玩家1使用WASD操作坦克移动，用F键发射子弹，玩家2使用方向键操作坦克，用J发射子弹。双方的获胜目标是摧毁对方的建筑或者让对方用尽复活次数。\n"
+                  "    可以通过关卡编辑器设计不同的地图之后在游戏内载入。"
+                  "	   按开始键开始游戏，游戏中间按暂停键可以暂停游戏");
+    over->exec();
+}
+
+void game_widget::on_PauseButton_clicked()
+{
+    if(ispause){
+        timer.start(TIME);
+        ui->PauseButton->setText("暂停");
+        ispause=!ispause;
+   } else {
+        timer.stop();
+        ui->PauseButton->setText("开始");
+        ispause=!ispause;
+    }
+    update();
 }
