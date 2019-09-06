@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2019-07-23T16:55:52
+# Project created by QtCreator 2019-09-03T18:38:32
 #
 #-------------------------------------------------
 
@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = mapmaker
+TARGET = try
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -25,45 +25,23 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        interface/J_currentplayer.cpp \
-        interface/J_idlogpage.cpp \
-        interface/J_idregister.cpp \
-        interface/J_loginpage.cpp \
-        interface/J_mainpage.cpp \
-        interface/J_mainwindow.cpp \
-        interface/J_players.cpp \
-        interface/J_succeed.cpp \
+        game_items.cpp \
         main.cpp \
-        map_maker/mapmaker.cpp \
-        map_maker/mymap.cpp \
+        game_widget.cpp \
+        mymap.cpp
 
 HEADERS += \
-        interface/J_currentplayer.h \
-        interface/J_idlogpage.h \
-        interface/J_idregister.h \
-        interface/J_loginpage.h \
-        interface/J_mainpage.h \
-        interface/J_mainwindow.h \
-        interface/J_players.h \
-        interface/J_succeed.h \
-        map_maker/mapmaker.h \
-        mymap.h \
+        game_items.h \
+        game_widget.h \
+        mymap.h
+
+FORMS += \
+        game_widget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-FORMS += \
-    interface/currentplayer.ui \
-    interface/idlogpage.ui \
-    interface/idregister.ui \
-    interface/loginpage.ui \
-    interface/mainpage.ui \
-    interface/mainwindow.ui \
-    interface/players.ui \
-    interface/succeed.ui \
-    map_maker/mapmaker.ui \
 
 RESOURCES += \
     resources.qrc

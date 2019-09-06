@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(Player,&Players::turn_page3,this,&MainWindow::turn3);
     connect(ls,&Succeed::turn_page5,this,&MainWindow::turn5);
     connect(login,&LoginPage::turn_page6,this,&MainWindow::turn6);
-    connect(current,&CurrentPlayer::turn_page2,this,&MainWindow::turn2);
+    connect(current,&CurrentPlayer::turn_page1,this,&MainWindow::turn1);
 }
 
 MainWindow::~MainWindow()

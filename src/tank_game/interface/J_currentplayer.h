@@ -17,7 +17,7 @@ public:
     ~CurrentPlayer();
 signals:
     void Game_begin(QString,QString);
-    void turn_page2();
+    void turn_page1();
 private slots:
     void on_pushButton_clicked();
 

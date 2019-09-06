@@ -23,5 +23,5 @@ void CurrentPlayer::on_pushButton_clicked()
 
 void CurrentPlayer::on_pushButton_2_clicked()
 {
-    emit turn_page2();
+    emit turn_page1();
 }
