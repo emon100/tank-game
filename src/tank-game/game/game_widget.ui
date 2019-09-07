@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>game_widget</class>
+ <widget class="QWidget" name="game_widget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>648</width>
+    <height>512</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>648</width>
+    <height>512</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>game_widget</string>
+  </property>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>10</y>
+     <width>121</width>
+     <height>491</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QPushButton" name="PauseButton">
+      <property name="text">
+       <string>暂停</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="P1_name">
+      <property name="text">
+       <string>p1</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="P1_score">
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="P1_lives">
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="P2_name">
+      <property name="text">
+       <string>p2</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="P2_score">
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="P2_lives">
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="LevelButton">
+      <property name="text">
+       <string>打开关卡</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="IntroButton">
+      <property name="text">
+       <string>游戏说明</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="ExitButton">
+      <property name="text">
+       <string>退出游戏</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
