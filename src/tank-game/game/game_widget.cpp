@@ -76,10 +76,10 @@ void game_widget::spawn_tanks(){
 
 void game_widget::kill_tank(QGraphicsItem *tank){
     if(tank==p1){
-        p2_score+=100;
+        p2_score+=500;
         spawn_tank1();
     }else if(tank==p2){
-        p1_score+=100;
+        p1_score+=500;
         spawn_tank2();
     }
 
@@ -110,9 +110,10 @@ void game_widget::p2_destroy(QGraphicsItem *item){
 
 void game_widget::spawn_tank1(){
     p1_lives--;
-    if(p1_lives>0){
-        if(p1==nullptr)
+    if(p1_lives>=0){
+        if(p1==nullptr){
             p1= new TANK(TANK_1);
+        }
         p1->bullet.hide();
         p1->setPos(32*map.spawn1.y()+16,32*map.spawn1.x()+16);
         p1->old_pos=p1->pos();
@@ -127,9 +128,10 @@ void game_widget::spawn_tank1(){
 }
 void game_widget::spawn_tank2(){
     p2_lives--;
-    if(p2_lives>0){
-        if(p2==nullptr)
+    if(p2_lives>=0){
+        if(p2==nullptr){
             p2= new TANK(TANK_2);
+        }
         p2->bullet.hide();
         p2->setPos(32*map.spawn2.y()+16,32*map.spawn2.x()+16);
         p2->old_pos=p2->pos();
@@ -453,9 +455,9 @@ void game_widget::on_IntroButton_clicked()
     QMessageBox *over=new QMessageBox(QMessageBox::Information,"坦克大战游戏介绍",
                                       "text",
                                       QMessageBox::Ok,nullptr);
-    over->setText("    本游戏为一款双人对战游戏，玩家1使用WASD操作坦克移动，用F键发射子弹，玩家2使用方向键操作坦克，用L发射子弹。双方的获胜目标是摧毁对方的建筑或者让对方用尽复活次数。\n"
+    over->setText("    本游戏为一款双人对战游戏，玩家1使用WASD操作坦克移动，用F键发射子弹，玩家2使用IJKL操作坦克，用问号键发射子弹。双方的获胜目标是摧毁对方的建筑或者让对方用尽复活次数。\n"
                   "    可以通过关卡编辑器设计不同的地图之后在游戏内载入。"
-                  "	   按开始键开始游戏，游戏中间按暂停键可以暂停游戏");
+                  "	   按回车可以开始或暂停游戏");
     over->exec();
 }
 

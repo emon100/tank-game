@@ -65,7 +65,7 @@
           </property>
           <property name="icon">
            <iconset resource="../resources.qrc">
-            <normaloff>:/resources/air.png</normaloff>:/resources/air.png</iconset>
+            <normaloff>:/resources/ice.bmp</normaloff>:/resources/ice.bmp</iconset>
           </property>
           <property name="checkable">
            <bool>true</bool>

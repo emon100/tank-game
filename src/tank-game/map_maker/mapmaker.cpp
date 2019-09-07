@@ -28,6 +28,8 @@ Mapmaker::Mapmaker(QWidget *parent) :
     connect(ui->Redo,&QAction::triggered,this,&Mapmaker::redo);
     connect(ui->Undo,&QAction::triggered,this,&Mapmaker::undo);
 
+    connect(ui->Help,&QAction::triggered,this,&Mapmaker::help);
+
     //click to change into view mode
     connect(ui->ViewButton,&QPushButton::clicked,this,&Mapmaker::change_mode<NONE>);
 
@@ -265,6 +267,25 @@ void Mapmaker::redo(){
     }
 }
 
+void Mapmaker::help(){
+        QMessageBox(QMessageBox::Information,"帮助",
+                    "    本关卡编辑器可以绘制坦克大战游戏的地图。各个按钮代表不同的模式\n"
+                    "    View:观察模式"
+                    "    Air:清除砖块\n"
+                    "    Brick:添加可破坏砖块\n"
+                    "    IRON:添加不可破坏砖块\n"
+                    "    Spawn1:修改玩家1重生地点\n"
+                    "    Spawn2:修改玩家2重生地点\n"
+                    "    Base1:修改玩家1基地\n"
+                    "    Base2:修改玩家2基地\n",
+                    QMessageBox::Ok,this).exec();
+}
+void Mapmaker::about(){
+        QMessageBox(QMessageBox::Information,"关于",
+                    "    本关卡编辑器由emon100开发\n"
+                    "    E-mail:emon100@qq.com\n",
+                    QMessageBox::Ok,this).exec();
+}
 
 Mapmaker::~Mapmaker()
 {

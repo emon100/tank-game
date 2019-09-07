@@ -23,6 +23,9 @@ public:
     explicit Mapmaker(QWidget *parent = nullptr);
     ~Mapmaker();
 
+private slots:
+    void help();
+    void about();
 private:
     MAP::mymap map;
     MAP_OBJECT cursor_status;
