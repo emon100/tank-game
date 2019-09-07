@@ -31,11 +31,8 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QPushButton" name="PauseButton">
-      <property name="text">
-       <string>暂停</string>
-      </property>
       <property name="shortcut">
-       <string>Space</string>
+       <string>Return</string>
       </property>
      </widget>
     </item>

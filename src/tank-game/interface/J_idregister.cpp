@@ -28,7 +28,7 @@ void IDregister::on_pushButton_clicked()
 {
     QString new_ID=ui->NameEdit->text();//注册账号
     QString new_Password=ui->PasswordEdit->text();//注册密码
-    if(new_ID==""||new_Password==""){
+    if(new_ID==""||new_Password==""){//检测空
         QMessageBox fail(QMessageBox::Warning,"注册失败","账号或密码为空",QMessageBox::Ok);
         fail.exec();
         ui->NameEdit->setText("");

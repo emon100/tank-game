@@ -2,6 +2,7 @@
 #include "J_mainwindow.h"
 #include "ui_mainwindow.h"
 #include "game/game_widget.h"
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -77,6 +78,7 @@ void MainWindow::turn5(){
 }
 /////跳转游戏///
 void MainWindow::open_game(const QString &p1,const QString &p2){
+    qDebug()<<p1<<p2;
     game_widget *game=new game_widget(nullptr,p1,p2);
     game->show();
     this->close();

@@ -15,8 +15,6 @@ game_widget::game_widget(QWidget *parent,const QString &p1_n,const QString &p2_n
     p2_name(p2_n)
 {
     ui->setupUi(this);
-    p1_name="player1";
-    p2_name="player2";
     setFocusPolicy(Qt::StrongFocus);
     on_IntroButton_clicked();
     init();
@@ -171,15 +169,16 @@ void game_widget::keyPressEvent(QKeyEvent *key){
     case Qt::Key_A   :p1->tank_movable=true;p1->set_direction(WEST);break;
     case Qt::Key_S   :p1->tank_movable=true;p1->set_direction(SOUTH);break;
     case Qt::Key_D   :p1->tank_movable=true;p1->set_direction(EAST);break;
-    case Qt::Key_F  :fire_bullet1();break;
+    case Qt::Key_C  :fire_bullet1();break;
+    case Qt::Key_Return  :on_PauseButton_clicked();break;
     }
     //p2
     switch(key->key()){
-    case Qt::Key_Up  :p2->tank_movable=true;p2->set_direction(NORTH);break;
-    case Qt::Key_Left:p2->tank_movable=true;p2->set_direction(WEST);break;
-    case Qt::Key_Down:p2->tank_movable=true;p2->set_direction(SOUTH);break;
-    case Qt::Key_Right:p2->tank_movable=true;p2->set_direction(EAST);break;
-    case Qt::Key_L   :fire_bullet2();break;
+    case Qt::Key_I  :p2->tank_movable=true;p2->set_direction(NORTH);break;
+    case Qt::Key_J:p2->tank_movable=true;p2->set_direction(WEST);break;
+    case Qt::Key_K:p2->tank_movable=true;p2->set_direction(SOUTH);break;
+    case Qt::Key_L:p2->tank_movable=true;p2->set_direction(EAST);break;
+    case Qt::Key_Slash   :fire_bullet2();break;
     }
     //qDebug()<<p1->pos()<<"pressed";
     return;
@@ -192,10 +191,10 @@ void game_widget::keyReleaseEvent(QKeyEvent *key){
     case Qt::Key_D   :p1->tank_movable=false;p1->set_direction(EAST);break;
     }
     switch(key->key()){
-    case Qt::Key_Up  :p2->tank_movable=false;p2->set_direction(NORTH);break;
-    case Qt::Key_Left:p2->tank_movable=false;p2->set_direction(WEST);break;
-    case Qt::Key_Down:p2->tank_movable=false;p2->set_direction(SOUTH);break;
-    case Qt::Key_Right:p2->tank_movable=false;p2->set_direction(EAST);break;
+    case Qt::Key_I  :p2->tank_movable=false;p2->set_direction(NORTH);break;
+    case Qt::Key_J:p2->tank_movable=false;p2->set_direction(WEST);break;
+    case Qt::Key_K:p2->tank_movable=false;p2->set_direction(SOUTH);break;
+    case Qt::Key_L:p2->tank_movable=false;p2->set_direction(EAST);break;
     }
     //qDebug()<<p1->pos()<<"released";
     return;

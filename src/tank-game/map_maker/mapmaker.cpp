@@ -176,7 +176,7 @@ void Mapmaker::open(){
     QString path;
     //dialog
     Mapmaker *window_to_be_use = this;
-    path = QFileDialog::getOpenFileName(this, tr("Open file"),".",tr("Text Files(*.map)"));
+    path = QFileDialog::getOpenFileName(this, tr("Open file"),".",tr("Map Files(*.map)"));
 
     if(path.isEmpty()){//Not OK
         QMessageBox::warning(this, tr("Path"),tr("You did not select any file."));
@@ -216,7 +216,7 @@ void Mapmaker::save(){
     QString  path = QFileDialog::getSaveFileName(this,
                                                  tr("Open File"),
                                                  ".",
-                                                 tr("Text Files(*.map)"));
+                                                 tr("Map Files(*.map)"));
     if(path.isEmpty()){
         QMessageBox::warning(this, tr("Path"),
                              tr("You did not select any file."));

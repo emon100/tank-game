@@ -34,7 +34,6 @@ SOURCES += \
         interface/J_mainpage.cpp \
         interface/J_mainwindow.cpp \
         interface/J_succeed.cpp \
-         interface/syd.cpp \
         main.cpp \
         map_maker/mapmaker.cpp \
         map_maker/mymap.cpp \

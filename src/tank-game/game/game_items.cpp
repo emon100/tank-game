@@ -39,18 +39,17 @@ bool BULLET::handleCollisions(){
     for (auto x : cols) {
         if(x->data(0) == IRON){
             ok=false;
-            if(this->data(0)==10)
-                emit destroy_item(x);
-            else {
-                emit destroy_item(x);
-            }
+            emit destroy_item(x);
             break;
         }else if (x->data(0) == BRICK) {
 
             ok = false;
             emit kill_tank(x);
             break;
-    }
+        }else if (x->data(0)==NONE){
+            ok = false;
+            break;
+        }
     }
     if(ok){
         qDebug()<<"OK";
@@ -120,10 +119,13 @@ bool TANK::handleCollisions(){
         if(x->data(0) == IRON){
             ok=false;
             break;
-        }else if(x->data(0)== BRICK){
+        }else if(x->data(0)== BRICK){//车
             ok=false;
             break;
-        }
+        }else if(x->data(0)==NONE){
+            ok=false;
+            break;
+    }
     }
     if(ok){
         qDebug()<<"OK";
@@ -152,9 +154,11 @@ MAP_ITEM::MAP_ITEM(MAP_OBJECT prop):
     case AIR   :air=true;current_img=AirImg.scaledToWidth(32);break;
     }
     if(air){
-        setData(0,AIR);
+        setData(0,AIR);//不可破坏物件,且可以穿过
+    }else if(property==IRON){
+        setData(0,NONE);
     }else {
-        setData(0,IRON);
+        setData(0,IRON);//可破坏物件
     }
     if(property==BASE1){
         setData(1,1);
