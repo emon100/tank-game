@@ -46,7 +46,7 @@ void IdlogPage::on_pushButton_clicked()
             in>>temp_id>>temp_password;//从文件里获得用户名和密码
             if(logID==temp_id&&logPassword==temp_password){
                 user1=temp_id;
-                QMessageBox success(QMessageBox::Information,"登录成功","loading.....",QMessageBox::Ok);
+                QMessageBox success(QMessageBox::Information,"欢迎您","登录成功！",QMessageBox::Ok);
                 success.exec();
                 emit log_succeed();
                 emit success_ID(logID);

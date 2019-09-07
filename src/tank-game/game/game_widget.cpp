@@ -454,7 +454,7 @@ void game_widget::on_IntroButton_clicked()
     QMessageBox *over=new QMessageBox(QMessageBox::Information,"坦克大战游戏介绍",
                                       "text",
                                       QMessageBox::Ok,nullptr);
-    over->setText("    本游戏为一款双人对战游戏，玩家1使用WASD操作坦克移动，用F键发射子弹，玩家2使用方向键操作坦克，用J发射子弹。双方的获胜目标是摧毁对方的建筑或者让对方用尽复活次数。\n"
+    over->setText("    本游戏为一款双人对战游戏，玩家1使用WASD操作坦克移动，用F键发射子弹，玩家2使用方向键操作坦克，用L发射子弹。双方的获胜目标是摧毁对方的建筑或者让对方用尽复活次数。\n"
                   "    可以通过关卡编辑器设计不同的地图之后在游戏内载入。"
                   "	   按开始键开始游戏，游戏中间按暂停键可以暂停游戏");
     over->exec();
