@@ -284,7 +284,7 @@ void Mapmaker::help(){
                     "    Base2:修改玩家2基地\n"
                     "    Spawn1:修改玩家1重生地点\n"
                     "    Spawn2:修改玩家2重生地点\n"
-                    "    双击出生点可以修改坦克出生面对的方 向",
+                    "    双击出生点可以修改坦克出生面对的方向",
                     QMessageBox::Ok,this).exec();
 }
 void Mapmaker::about(){

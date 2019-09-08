@@ -203,7 +203,7 @@ void game_widget::keyReleaseEvent(QKeyEvent *key){
 }
 
 void game_widget::fire_bullet1(){
-    if(p1->bullet_movable==false){//不行才可发射
+    if(ispause==false&&p1->bullet_movable==false){//不行才可发射
         p1->bullet_movable=true;
         BULLET &b=p1->bullet;
         b.show();
@@ -218,7 +218,7 @@ void game_widget::fire_bullet1(){
 }
 
 void game_widget::fire_bullet2(){
-    if(p2->bullet_movable==false){//不行才可发射
+    if(ispause==false&&p2->bullet_movable==false){//不行才可发射
         p2->bullet_movable=true;
         BULLET &b=p2->bullet;
         b.show();
@@ -234,8 +234,8 @@ void game_widget::fire_bullet2(){
 
 void game_widget::object_update(){
     bullets_update();
-    scene->update();
     tanks_update();
+    scene->update();
     game_ui_update();
 }
 
@@ -344,6 +344,7 @@ void game_widget::tanks_update(){//同时在不发射子弹的时候负责承载
             }
         }
     }else {}
+    //判断坦克离开地图
     if(p1->pos().x()<0||p1->pos().x()>512||p1->pos().y()<0||p1->pos().y()>512){
         spawn_tank1();
     }
@@ -355,7 +356,7 @@ void game_widget::tanks_update(){//同时在不发射子弹的时候负责承载
 
 
 
-//界面逻辑
+/////界面逻辑
 void game_widget::open(){
     QString path;
     //dialog
@@ -391,12 +392,20 @@ void game_widget::open_with_path(const QString &path){
     }
     return;
 }
+
+//历史最佳对局功能
 void game_widget::scores_output(){
     QFile file("scores.dat");
     bool change=false;
     QString temp_id;
     int temp_score;
-    if(file.open(QIODevice::ReadOnly)){
+    if(!file.open(QIODevice::ReadOnly)){
+        if (file.open(QIODevice::WriteOnly)) {
+            QDataStream out(&file);
+            out<<p1_name<<p1_score;
+            out<<p2_name<<p2_score;
+        }
+    }else {
         QDataStream in(&file);
         in>>temp_id>>temp_score;
         if(temp_score<=p1_score){
@@ -407,7 +416,7 @@ void game_widget::scores_output(){
             change=true;
         }else {
             change=false;
-}
+        }
         file.close();
     }
     if(change) {
@@ -476,10 +485,6 @@ void game_widget::final(int n){
         QWidget::close();
     }
 }
-game_widget::~game_widget()
-{
-    delete ui;
-}
 
 void game_widget::on_LevelButton_clicked()
 {
@@ -489,7 +494,7 @@ void game_widget::on_LevelButton_clicked()
     init();
 }
 
-void game_widget::on_IntroButton_clicked()
+void game_widget::on_IntroButton_clicked()//说明
 {
     QMessageBox *over=new QMessageBox(QMessageBox::Information,"坦克大战游戏介绍",
                                       "text",
@@ -500,7 +505,7 @@ void game_widget::on_IntroButton_clicked()
     over->exec();
 }
 
-void game_widget::on_PauseButton_clicked()
+void game_widget::on_PauseButton_clicked()//暂停
 {
     if(ispause){
         timer.start(TIME);
@@ -512,4 +517,9 @@ void game_widget::on_PauseButton_clicked()
         ispause=!ispause;
     }
     update();
+}
+
+game_widget::~game_widget()
+{
+    delete ui;
 }
