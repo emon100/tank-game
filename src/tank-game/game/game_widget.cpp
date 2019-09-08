@@ -29,8 +29,8 @@ void game_widget::init(){
     p2=nullptr;
     p1_score=0;
     p2_score=0;
-    p1_lives=3;
-    p2_lives=3;
+    p1_lives=4;
+    p2_lives=4;
     ispause=true;
     ui->PauseButton->setText("开始");
     game_ui_update();
@@ -380,20 +380,44 @@ void game_widget::open_with_path(const QString &path){
         QDataStream in(&file);
         in.readRawData(reinterpret_cast<char *>(&map),sizeof(map));
         file.close();
+        if(map.spawn1_direction>3||map.spawn1_direction<0){//校验
+        QMessageBox::warning(this, tr("ERROR"),
+                             tr("Cannot open file:\n%1").arg(path));
+        map.init();
+        return;
+        }
         qDebug()<<"File OK";
         initSceneView();//打开好了才初始化游戏界面
     }
     return;
 }
-void game_widget::safe_close(){
-        QFile file("scores.dat");
-        if(file.open(QIODevice::WriteOnly)){
-        QDataStream out;
-
-        } else {}
-
-
-        QWidget::close();
+void game_widget::scores_output(){
+    QFile file("scores.dat");
+    bool change=false;
+    QString temp_id;
+    int temp_score;
+    if(file.open(QIODevice::ReadOnly)){
+        QDataStream in(&file);
+        in>>temp_id>>temp_score;
+        if(temp_score<=p1_score){
+            change=true;
+        }
+        in>>temp_id>>temp_score;
+        if(temp_score<=p2_score&&change){
+            change=true;
+        }else {
+            change=false;
+}
+        file.close();
+    }
+    if(change) {
+    if(file.open(QIODevice::WriteOnly)){
+        QDataStream out(&file);
+        out<<p1_name<<p1_score;
+        out<<p2_name<<p2_score;
+        file.close();
+    }
+    }
 }
 void game_widget::close(){
     if(QMessageBox::Yes==QMessageBox::question(this,
@@ -401,13 +425,13 @@ void game_widget::close(){
                                                tr("Are you sure to quit?"),
                                                QMessageBox::Yes|QMessageBox::No,QMessageBox::No))
     {
-        safe_close();
+        QWidget::close();
     }
     else return;
 }
 void game_widget::game_ui_update(){
-    ui->P1_name->setText(QString("玩家1:%1").arg(p1_name));
-    ui->P2_name->setText(QString("玩家2:%1").arg(p2_name));
+    ui->P1_name->setText(QString("%1").arg(p1_name));
+    ui->P2_name->setText(QString("%1").arg(p2_name));
     ui->P1_score->setText(QString("分数:%1").arg(p1_score));
     ui->P2_score->setText(QString("分数:%1").arg(p2_score));
     ui->P1_lives->setText(QString("剩余生命:%1").arg(p1_lives));
@@ -415,6 +439,8 @@ void game_widget::game_ui_update(){
 }
 void game_widget::final(int n){
     timer.stop();
+
+
     QMessageBox *over=new QMessageBox(QMessageBox::Information,"游戏结束",
                                       "text",
                                       QMessageBox::Yes|QMessageBox::No,nullptr);
@@ -426,16 +452,29 @@ void game_widget::final(int n){
     }else if(n==2){
        over->setText(QString("玩家%1赢了!，分数为%2分，玩家%3也有%4分").arg(p2_name).arg(p2_score).arg(p1_name).arg(p1_score));
     }
+    QFile scores("scores.dat");
+    if(scores.open(QIODevice::ReadOnly)){
+        over->setText(over->text()+"\n"+"历史精彩对局");
+        QDataStream in(&scores);
+        QString temp_id;
+        int   temp_score;
+        for (int i=0;i<2&&!in.atEnd();++i) {
+            in>>temp_id>>temp_score;
+            over->setText(over->text()+"\n"+temp_id+QString("   %1").arg(temp_score));
+            in>>temp_id>>temp_score;
+            over->setText(over->text()+"\n"+temp_id+QString("   %1").arg(temp_score));
+        }
+        scores.close();
+    }
+    scores_output();
     int result=over->exec();
     if(result==QMessageBox::Yes){
         scene->clear();
         view->close();
         init();
     }else {
-        safe_close();
         QWidget::close();
     }
-
 }
 game_widget::~game_widget()
 {
@@ -455,7 +494,7 @@ void game_widget::on_IntroButton_clicked()
     QMessageBox *over=new QMessageBox(QMessageBox::Information,"坦克大战游戏介绍",
                                       "text",
                                       QMessageBox::Ok,nullptr);
-    over->setText("    本游戏为一款双人对战游戏，玩家1使用WASD操作坦克移动，用F键发射子弹，玩家2使用IJKL操作坦克，用问号键发射子弹。双方的获胜目标是摧毁对方的建筑或者让对方用尽复活次数。\n"
+    over->setText("    本游戏为一款双人对战游戏，玩家1使用W A S D操作坦克移动，用C键发射子弹，玩家2使用I J K L操作坦克，用问号键发射子弹。双方的获胜目标是摧毁对方的建筑或者让对方用尽复活次数。\n"
                   "    可以通过关卡编辑器设计不同的地图之后在游戏内载入。"
                   "	   按回车可以开始或暂停游戏");
     over->exec();

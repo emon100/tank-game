@@ -34,9 +34,9 @@ public:
     DIRECTION spawn1_direction;
     DIRECTION spawn2_direction;
     mymap();
+    void init();
     //使用默认复制构造函数
 private:
-    void init();
 };
 }
 

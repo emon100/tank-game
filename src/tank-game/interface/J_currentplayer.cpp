@@ -24,7 +24,7 @@ void CurrentPlayer::on_pushButton_clicked()
         fail.exec();
         return;
     }
-    emit    Game_begin(ui->current1->text(),ui->current2->text());
+    emit    Game_begin("guest"+ui->current1->text(),"guest"+ui->current2->text());
     ui->current1->clear();
     ui->current2->clear();
 }

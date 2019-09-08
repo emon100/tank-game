@@ -71,7 +71,7 @@ private:
 
     void final(int n);
     void init();
-    void safe_close();
+    void scores_output();
 signals:
     void win(int n);
 private slots:

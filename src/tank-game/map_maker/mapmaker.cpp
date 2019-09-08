@@ -208,6 +208,12 @@ void Mapmaker::open_with_path(QString path){
         QDataStream in(&file);
         in.readRawData(reinterpret_cast<char *>(&map),sizeof(map));
         file.close();
+        if(map.spawn1_direction>3||map.spawn1_direction<0){
+        QMessageBox::warning(this, tr("ERROR"),
+                             tr("Cannot open file:\n%1").arg(path));
+        map.init();
+        return;
+        }
         draw_table();
     }
     return;
@@ -269,15 +275,16 @@ void Mapmaker::redo(){
 
 void Mapmaker::help(){
         QMessageBox(QMessageBox::Information,"帮助",
-                    "    本关卡编辑器可以绘制坦克大战游戏的地图。各个按钮代表不同的模式\n"
+                    "    本关卡编辑器可以绘制坦克大战游戏的地图。各个按钮代表不同的模式:\n"
                     "    View:观察模式"
                     "    Air:清除砖块\n"
                     "    Brick:添加可破坏砖块\n"
-                    "    IRON:添加不可破坏砖块\n"
+                    "    Iron:添加不可破坏砖块\n"
+                    "    Base1:修改玩家1基地\n"
+                    "    Base2:修改玩家2基地\n"
                     "    Spawn1:修改玩家1重生地点\n"
                     "    Spawn2:修改玩家2重生地点\n"
-                    "    Base1:修改玩家1基地\n"
-                    "    Base2:修改玩家2基地\n",
+                    "    双击出生点可以修改坦克出生面对的方 向",
                     QMessageBox::Ok,this).exec();
 }
 void Mapmaker::about(){

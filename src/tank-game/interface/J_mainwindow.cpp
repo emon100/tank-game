@@ -80,6 +80,7 @@ void MainWindow::turn5(){
 void MainWindow::open_game(const QString &p1,const QString &p2){
     qDebug()<<p1<<p2;
     game_widget *game=new game_widget(nullptr,p1,p2);
+    game->setWindowTitle("坦克大战");
     game->show();
     this->close();
 }
