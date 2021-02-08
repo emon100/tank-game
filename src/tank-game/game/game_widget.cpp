@@ -49,7 +49,7 @@ void game_widget::init(){
 
 void game_widget::initSceneView(){
     scene = new QGraphicsScene(this);
-    view  = new QGraphicsView(this);
+    view  = new QGraphicsView(scene,this);
     scene->setSceneRect(0,0,512,512);
     scene->installEventFilter(this);
     set_map_items();
@@ -164,42 +164,52 @@ void game_widget::set_map_items(){
     }
 }
 
+/*TODO:Handle input using QMap to implement mutiple key input*/
 void game_widget::keyPressEvent(QKeyEvent *key){
+    current_pressed_key.insert(key->key());
+    p1->tank_movable=false;
+    p2->tank_movable=false;
     //p1
-    switch(key->key()){
-    case Qt::Key_W   :p1->tank_movable=true;p1->set_direction(NORTH);break;
-    case Qt::Key_A   :p1->tank_movable=true;p1->set_direction(WEST);break;
-    case Qt::Key_S   :p1->tank_movable=true;p1->set_direction(SOUTH);break;
-    case Qt::Key_D   :p1->tank_movable=true;p1->set_direction(EAST);break;
-    case Qt::Key_C  :fire_bullet1();break;
-    case Qt::Key_Return  :on_PauseButton_clicked();break;
-    }
+    if(current_pressed_key.contains(Qt::Key_W)){p1->tank_movable=true;p1->set_direction(NORTH);   }
+    if(current_pressed_key.contains(Qt::Key_A)){p1->tank_movable=true;p1->set_direction(WEST);                 }
+    if(current_pressed_key.contains(Qt::Key_S)){p1->tank_movable=true;p1->set_direction(SOUTH);                }
+    if(current_pressed_key.contains(Qt::Key_D)){p1->tank_movable=true;p1->set_direction(EAST);                 }
+    if(current_pressed_key.contains(Qt::Key_C)){fire_bullet1();                                                }
+
+
     //p2
-    switch(key->key()){
-    case Qt::Key_I  :p2->tank_movable=true;p2->set_direction(NORTH);break;
-    case Qt::Key_J:p2->tank_movable=true;p2->set_direction(WEST);break;
-    case Qt::Key_K:p2->tank_movable=true;p2->set_direction(SOUTH);break;
-    case Qt::Key_L:p2->tank_movable=true;p2->set_direction(EAST);break;
-    case Qt::Key_Slash   :fire_bullet2();break;
-    }
+    if(current_pressed_key.contains(Qt::Key_I)){p2->tank_movable=true;p2->set_direction(NORTH);}
+    if(current_pressed_key.contains(Qt::Key_J)){p2->tank_movable=true;p2->set_direction(WEST);}
+    if(current_pressed_key.contains(Qt::Key_K)){p2->tank_movable=true;p2->set_direction(SOUTH);}
+    if(current_pressed_key.contains(Qt::Key_L)){p2->tank_movable=true;p2->set_direction(EAST);}
+    if(current_pressed_key.contains(Qt::Key_Slash)){  fire_bullet2();}
+
+    if(current_pressed_key.contains(Qt::Key_Return)){  on_PauseButton_clicked();}
     //qDebug()<<p1->pos()<<"pressed";
+
     return;
 }
 void game_widget::keyReleaseEvent(QKeyEvent *key){
-    switch(key->key()){
-    case Qt::Key_W   :p1->tank_movable=false;p1->set_direction(NORTH);break;
-    case Qt::Key_A   :p1->tank_movable=false;p1->set_direction(WEST);break;
-    case Qt::Key_S   :p1->tank_movable=false;p1->set_direction(SOUTH);break;
-    case Qt::Key_D   :p1->tank_movable=false;p1->set_direction(EAST);break;
+    if(current_pressed_key.remove(key->key())){
+        p1->tank_movable=false;
+        p2->tank_movable=false;
+        //p1
+        if(current_pressed_key.contains(Qt::Key_W)){p1->tank_movable=true;p1->set_direction(NORTH);   }
+        if(current_pressed_key.contains(Qt::Key_A)){p1->tank_movable=true;p1->set_direction(WEST);                 }
+        if(current_pressed_key.contains(Qt::Key_S)){p1->tank_movable=true;p1->set_direction(SOUTH);                }
+        if(current_pressed_key.contains(Qt::Key_D)){p1->tank_movable=true;p1->set_direction(EAST);                 }
+        if(current_pressed_key.contains(Qt::Key_C)){fire_bullet1();                                                }
+
+
+        //p2
+        if(current_pressed_key.contains(Qt::Key_I)){p2->tank_movable=true;p2->set_direction(NORTH);}
+        if(current_pressed_key.contains(Qt::Key_J)){p2->tank_movable=true;p2->set_direction(WEST);}
+        if(current_pressed_key.contains(Qt::Key_K)){p2->tank_movable=true;p2->set_direction(SOUTH);}
+        if(current_pressed_key.contains(Qt::Key_L)){p2->tank_movable=true;p2->set_direction(EAST);}
+        if(current_pressed_key.contains(Qt::Key_Slash)){fire_bullet2();}
+
+        if(current_pressed_key.contains(Qt::Key_Return)){on_PauseButton_clicked();}
     }
-    switch(key->key()){
-    case Qt::Key_I  :p2->tank_movable=false;p2->set_direction(NORTH);break;
-    case Qt::Key_J:p2->tank_movable=false;p2->set_direction(WEST);break;
-    case Qt::Key_K:p2->tank_movable=false;p2->set_direction(SOUTH);break;
-    case Qt::Key_L:p2->tank_movable=false;p2->set_direction(EAST);break;
-    }
-    //qDebug()<<p1->pos()<<"released";
-    return;
 }
 
 void game_widget::fire_bullet1(){
@@ -259,10 +269,10 @@ void game_widget::bullets_update(){
     }
     if(p2->bullet_movable){
         switch(p2->bullet.getDirection()){
-        case NORTH:p2_now.ry()-=p2_speed;;break;
-        case WEST :p2_now.rx()-=p2_speed;;break;
-        case SOUTH:p2_now.ry()+=p2_speed;;break;
-        case EAST :p2_now.rx()+=p2_speed;;break;
+        case NORTH:p2_now.ry()-=p2_speed;break;
+        case WEST :p2_now.rx()-=p2_speed;break;
+        case SOUTH:p2_now.ry()+=p2_speed;break;
+        case EAST :p2_now.rx()+=p2_speed;break;
         }
         p2->bullet.setPos(p2_now);
     }else {
@@ -388,7 +398,7 @@ void game_widget::open_with_path(const QString &path){
         return;
         }
         qDebug()<<"File OK";
-        initSceneView();//打开好了才初始化游戏界面
+        initSceneView();//打开好了才初始化游戏界面,TODO:bug:取消暂停后再加载地图之后坦克可以随意移动。
     }
     return;
 }

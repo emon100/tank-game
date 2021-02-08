@@ -8,13 +8,14 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    setAttribute(Qt::WA_QuitOnClose);
     ui->setupUi(this);
-    MainPage *main= new MainPage();
-    LoginPage *login= new LoginPage();
-    IdlogPage *idlogin= new IdlogPage();
-    Succeed *ls= new Succeed();
-    IDregister *regis= new IDregister();
-    CurrentPlayer *current=new CurrentPlayer();
+    MainPage *main= new MainPage(this);
+    LoginPage *login= new LoginPage(this);
+    IdlogPage *idlogin= new IdlogPage(this);
+    Succeed *ls= new Succeed(this);
+    IDregister *regis= new IDregister(this);
+    CurrentPlayer *current=new CurrentPlayer(this);
     ui->stackedWidget->addWidget(main);//主页。。。。。。0
     ui->stackedWidget->addWidget(login);//登录页.。。。。1
     ui->stackedWidget->addWidget(idlogin);//账号登陆.。。2

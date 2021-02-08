@@ -9,7 +9,6 @@
 #include <QGraphicsView>
 #include <QGraphicsItem>
 #include <QTimer>
-#include <QPair>
 #include "map_maker/mymap.h"
 #include "game/game_items.h"
 
@@ -35,6 +34,9 @@ private:
     Ui::game_widget *ui;
     QTimer timer;
     bool ispause;
+
+    QSet<int> current_pressed_key;
+
     QGraphicsScene  *scene;//场景
     QGraphicsView   *view;//视图
     MAP::mymap map;//地图文件

@@ -21,7 +21,7 @@ public:
 
     void setDirection(DIRECTION d){direction=d;}
     DIRECTION getDirection(){return direction;}
-    void getBulletStatus(QMatrix &matrixBullet, QImage &imgBullet);
+    //void getBulletStatus(QMatrix &matrixBullet, QImage &imgBullet);
     bool handleCollisions();
 
     bool isWall(int xx, int yy);

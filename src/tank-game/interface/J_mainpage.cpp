@@ -28,5 +28,6 @@ void MainPage::on_Exit_clicked()
 void MainPage::on_goto_mapmaker_clicked()
 {
     Mapmaker *window = new Mapmaker(this);
+    window->setAttribute(Qt::WA_DeleteOnClose);
     window->show();
 }

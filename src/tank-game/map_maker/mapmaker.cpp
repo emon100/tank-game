@@ -105,13 +105,13 @@ void Mapmaker::set_cell(int row, int column, MAP_OBJECT sta){//Model:change the 
     switch (sta) {
     case NONE  : return;
     case AIR   : cell = nullptr;break;
-    case BRICK : cell = new QLabel("Brick") ;cell->setPixmap(QPixmap::fromImage(BrickImg));break;
-    case IRON  : cell = new QLabel("Iron")  ;cell->setPixmap(QPixmap::fromImage(IronImg)) ;break;
+    case BRICK : cell = new QLabel("Brick",this) ;cell->setPixmap(QPixmap::fromImage(BrickImg));break;
+    case IRON  : cell = new QLabel("Iron",this)  ;cell->setPixmap(QPixmap::fromImage(IronImg)) ;break;
         //Bases and spawns has to keep the only one;
-    case BASE1 : cell = new QLabel("Base1") ;cell->setPixmap(QPixmap::fromImage(Base1Img)) ;ui->maptable->removeCellWidget(map.base1.x(),map.base1.y())  ;set_cell(map.base1.x(),map.base1.y(),AIR);map.base1.setX(row);map.base1.setY(column);break;
-    case BASE2 : cell = new QLabel("Base2") ;cell->setPixmap(QPixmap::fromImage(Base2Img)) ;ui->maptable->removeCellWidget(map.base2.x(),map.base2.y())  ;set_cell(map.base2.x(),map.base2.y(),AIR);map.base2.setX(row);map.base2.setY(column);break;
-    case SPAWN1: cell = new QLabel("Spawn1");cell->setPixmap(QPixmap::fromImage(Spawn1Img));ui->maptable->removeCellWidget(map.spawn1.x(),map.spawn1.y());set_cell(map.spawn1.x(),map.spawn1.y(),AIR);map.spawn1.setX(row);map.spawn1.setY(column);break;
-    case SPAWN2: cell = new QLabel("Spawn2");cell->setPixmap(QPixmap::fromImage(Spawn2Img));ui->maptable->removeCellWidget(map.spawn2.x(),map.spawn2.y());set_cell(map.spawn2.x(),map.spawn2.y(),AIR);map.spawn2.setX(row);map.spawn2.setY(column);break;
+    case BASE1 : cell = new QLabel("Base1",this) ;cell->setPixmap(QPixmap::fromImage(Base1Img)) ;ui->maptable->removeCellWidget(map.base1.x(),map.base1.y())  ;set_cell(map.base1.x(),map.base1.y(),AIR);map.base1.setX(row);map.base1.setY(column);break;
+    case BASE2 : cell = new QLabel("Base2",this) ;cell->setPixmap(QPixmap::fromImage(Base2Img)) ;ui->maptable->removeCellWidget(map.base2.x(),map.base2.y())  ;set_cell(map.base2.x(),map.base2.y(),AIR);map.base2.setX(row);map.base2.setY(column);break;
+    case SPAWN1: cell = new QLabel("Spawn1",this);cell->setPixmap(QPixmap::fromImage(Spawn1Img));ui->maptable->removeCellWidget(map.spawn1.x(),map.spawn1.y());set_cell(map.spawn1.x(),map.spawn1.y(),AIR);map.spawn1.setX(row);map.spawn1.setY(column);break;
+    case SPAWN2: cell = new QLabel("Spawn2",this);cell->setPixmap(QPixmap::fromImage(Spawn2Img));ui->maptable->removeCellWidget(map.spawn2.x(),map.spawn2.y());set_cell(map.spawn2.x(),map.spawn2.y(),AIR);map.spawn2.setX(row);map.spawn2.setY(column);break;
     }
     map.mapplane[static_cast<size_t>(row)][static_cast<size_t>(column)]=sta;
     ui->maptable->setCellWidget(row,column,cell);
@@ -164,6 +164,7 @@ void Mapmaker::add_new(){
                                               tr("Create new file in this window might lead to data lost.\nOpen in a new window?"),
                                               QMessageBox::Yes|QMessageBox::No,QMessageBox::Yes)){
         window_to_be_use = new Mapmaker();
+        window_to_be_use->setAttribute(Qt::WA_DeleteOnClose);
         window_to_be_use->show();
     }
     else {
@@ -190,6 +191,7 @@ void Mapmaker::open(){
                                                   tr("Open in this window might lead to data lost.\nOpen in a new window?"),
                                                   QMessageBox::Yes|QMessageBox::No,QMessageBox::Yes)){
             window_to_be_use = new Mapmaker();
+            window_to_be_use->setAttribute(Qt::WA_DeleteOnClose);
             window_to_be_use->show();
         }else{
             //do nothing
@@ -236,7 +238,7 @@ void Mapmaker::save(){
             return;
         }else{
             QDataStream out(&file);
-            out.writeRawData(reinterpret_cast<char *>(&map),sizeof (map));
+            out.writeRawData(reinterpret_cast<char *>(&map),sizeof (map));//TODO:因为大小端的原因，这个写法是很可能出现问题的。
             file.close();
         }
     }

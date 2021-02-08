@@ -65,7 +65,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="credit">
    <property name="geometry">
     <rect>
      <x>100</x>
