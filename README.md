@@ -13,3 +13,6 @@ mapmaker文件夹中为地图编辑器的源代码
 
 ## Screenshots
 
+![Map Editor](https://github.com/emon100/tank-game/blob/master/public/map_editor.jpg)
+
+![Gameplay](https://github.com/emon100/tank-game/blob/master/public/game.jpg)
